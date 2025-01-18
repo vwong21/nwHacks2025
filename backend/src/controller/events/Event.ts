@@ -3,7 +3,8 @@ export default class Event {
 	private _id: string;
 	private _title: string;
 	private _location: string;
-	private _schedule: Date;
+	private _start: Date;
+	private _end: Date;
 	private _organizerId: string;
 
 	/**
@@ -16,11 +17,12 @@ export default class Event {
 	 * 
 	 *  Creates an Event Object with necessary information
 	 */
-	constructor(id:string, title:string, location:string, schedule:Date, organizerId: string) {
+	constructor(id:string, title:string, location:string, start:Date, end: Date, organizerId: string) {
 		this._id = id;
 		this._title = title;
 		this._location = location;
-		this._schedule = schedule;
+		this._start = start;
+		this._end = end;
 		this._organizerId = organizerId;
 	}
 
@@ -49,13 +51,22 @@ export default class Event {
 		this._location = location;
 	}
 
-	public get schedule(): Date {
-		return this._schedule;
+	public get start(): Date {
+		return this._start;
 	}
 	
-	public set schedule(schedule: Date) {
-		this._schedule = schedule;
+	public set start(start: Date) {
+		this._start = start;
 	}
+
+	public get end(): Date {
+		return this._end;
+	}
+	
+	public set end(end: Date) {
+		this._end = end;
+	}
+
 
 	public get organizerId(): string {
 		return this._organizerId;
