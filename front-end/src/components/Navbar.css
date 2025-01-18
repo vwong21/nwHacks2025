@@ -1,0 +1,40 @@
+nav {
+    width: 100%; /* Ensures the navbar spans the full width */
+    height: 4rem; /* Adjust to your preferred height */
+    background-color: white; /* Background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    display: flex;
+    justify-content: space-between; /* Aligns items to the left and right */
+    align-items: center; /* Centers items vertically */
+    padding: 0 1rem; /* Adds padding inside the navbar */
+    overflow: hidden; /* Prevents content overflow */
+  }
+  
+  /* Prevents horizontal scrolling caused by the body */
+  body {
+    margin: 0; /* Removes default body margin */
+    overflow-x: hidden; /* Disables horizontal scrolling */
+  }
+  
+  .menu-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  
+  .menu-icon span {
+    display: block;
+    height: 2px;
+    background-color: #333;
+  }
+  
+  .profile-pic {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
