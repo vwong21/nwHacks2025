@@ -1,33 +1,84 @@
-import { useEffect } from "react";
-// imported from firebase auth sdk
-import { getAuth } from "firebase/auth";
-// ensures compatibility with the older versions of firebase
-import firebase from "firebase/compat/app";
-// imports pre-built UI for firebase authentication
-import * as firebaseui from "firebaseui";
-// imports the firebaseui styles using the CDN
-import "firebaseui/dist/firebaseui.css";
-import { app } from "./firebaseConfig";
-export default function Login() {
-  useEffect(() => {
-    const ui =
-      firebaseui.auth.AuthUI.getInstance() ||
-      // since Firebase v9 and above service are imported when needed instad of being a namespace
-      new firebaseui.auth.AuthUI(getAuth(app));
+import React, {useState} from 'react';
+import {  signInWithEmailAndPassword   } from 'firebase/auth';
+import { auth } from './firebaseConfig';
+import { NavLink, useNavigate } from 'react-router-dom'
 
-    ui.start("#firebaseui-auth-container", {
-      signInSuccessUrl: "/home",
-      signInOptions: [
+const Login = () => {
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-        {
-          provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        },
+    const onLogin = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            navigate("/home")
+            console.log(user);
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode, errorMessage)
+        });
 
-      ],
-      // required to enable one-tap sign-up credential helper
-      credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
-    });
-  }, []);
+    }
+    return(
+        <>
+            <main >        
+                <section>
+                    <div>                                            
+                        <p> FocusApp </p>                       
 
-  return <div id="firebaseui-auth-container"></div>;
+                        <form onSubmit={onLogin}>                                              
+                            <div>
+                                <label htmlFor="email-address">
+                                    Email address
+                                </label>
+                                <input
+                                    id="email-address"
+                                    name="email"
+                                    type="email"                                    
+                                    required                                                                                
+                                    placeholder="Email address"
+                                    onChange={(e)=>setEmail(e.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <label htmlFor="password">
+                                    Password
+                                </label>
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"                                    
+                                    required                                                                                
+                                    placeholder="Password"
+                                    onChange={(e)=>setPassword(e.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <button type="submit">      
+                                    Login                                                                  
+                                </button>
+                            </div>                               
+                        </form>
+
+                        <p className="text-sm text-white text-center">
+                            No account yet? {' '}
+                            <NavLink to="/signup">
+                                Sign up
+                            </NavLink>
+                        </p>
+
+                    </div>
+                </section>
+            </main>
+        </>
+    )
 }
+
+export default Login
