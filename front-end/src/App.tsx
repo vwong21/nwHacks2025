@@ -1,13 +1,18 @@
-import React from 'react';
-import Navbar from './components/Navbar';
-import './globals.css';
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Home from "./home";
+import Login from "./login";
 
-const App: React.FC = () => {
+function App() {
   return (
-    <div>
-      <Navbar />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate replace to="/home" />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   );
-};
+}
 
 export default App;
