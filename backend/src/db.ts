@@ -38,7 +38,7 @@ const createUser = (
 				if (err) {
 					return reject(err);
 				}
-				resolve({ id: id });
+				resolve(getUser(id, userType));
 			}
 		);
 	});
