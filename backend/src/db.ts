@@ -70,4 +70,58 @@ const getUser = (id: string, userType: string): Promise<any> => {
 	});
 };
 
-export { createUser, getUser };
+// getEvent
+const getEvent = (id: string): Promise<any> => {
+	return new Promise((resolve, reject) => {
+		const res: any = {};
+
+		const query = `SELECT * FROM events WHERE id = ?`;
+
+		db.get(query, [id], (err: any, row: any) => {
+			if (err) {
+				return reject(err);
+			}
+
+			if (!row) {
+				return reject(new Error('Event not found'));
+			}
+
+			// Populate the res object with row data
+			for (const [key, value] of Object.entries(row)) {
+				res[key] = value;
+			}
+			console.log(res);
+			resolve(res);
+		});
+	});
+};
+
+// createEvent
+const createEvent = (
+	id: string,
+	title: string,
+	location: string,
+	schedule: string,
+	organizerId: string
+) => {
+	return new Promise((resolve, reject) => {
+		db.run(
+			`INSERT INTO events (id, title, location, schedule, organizerId) VALUES (?, ?, ?, ?, ?)`,
+			[id, title, location, schedule, organizerId],
+			(err: any) => {
+				if (err) {
+					return reject(err);
+				}
+				resolve(getEvent(id));
+			}
+		);
+	});
+};
+
+// getUsersByEvent
+
+// getEventsByUser
+
+createEvent('1', 'Event 1', 'Location 1', 'Schedule 1', '1');
+
+export { createUser, getUser, createEvent, getEvent };
