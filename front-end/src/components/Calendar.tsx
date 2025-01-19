@@ -24,24 +24,36 @@ const Calendar: React.FC<CalendarProps> = ({ role }) => {
 			try {
 				let response;
 				if (role === 'student') {
+					console.log(role);
 					const res = await axios.get(
 						`http://localhost:3000/event_student/${details?.id}`
 					);
 					response = res.data; // Directly access the response data
+					console.log(response);
 				}
 				if (role === 'organizer') {
-					response = await axios.get(
+					console.log(role);
+					const res = await axios.get(
 						`http://localhost:3000/event/${details?.id}`
 					);
+					response = res.data; // Access the event details for organizer
+					console.log(response);
 				}
 
-				// Check if the response contains an array (students) or a single object (organizers)
-				const eventsArray = Array.isArray(response?.events)
-					? response?.events
-					: [response?.events]; // If it's a single object, convert it into an array
+				// For students: Check if the response contains an array
+				const eventsArray =
+					role === 'student' && Array.isArray(response?.events)
+						? response?.events
+						: [response?.events]; // For organizers, treat eventInfo as an array with one item
+
+				// If it's an organizer, just use the eventInfo as an array of one event
+				const eventsToMap =
+					role === 'organizer' && response?.eventInfo
+						? [response.eventInfo] // Wrap eventInfo in an array
+						: eventsArray; // Use events for students
 
 				// Format the events to match FullCalendar's requirements
-				const formattedEvents = eventsArray.map((event: any) => ({
+				const formattedEvents = eventsToMap.map((event: any) => ({
 					id: event.id, // Unique identifier
 					title: event.title,
 					start: event.start, // Start date/time in ISO format
@@ -58,8 +70,8 @@ const Calendar: React.FC<CalendarProps> = ({ role }) => {
 			}
 		};
 
-		fetchEventDetails();
-	}, []);
+		fetchEventDetails(); // Call the function when the component mounts
+	}, [details?.id, role]); // Dependency array to re-run when `details?.id` or `role` changes
 
 	// Handle date selection for organizers
 	const handleDateSelect = (selectInfo: any) => {
