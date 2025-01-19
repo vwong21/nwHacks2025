@@ -98,18 +98,32 @@ const Signup = () => {
 							/>
 						</div>
 
-						<div className='signup-form-group'>
-							<label htmlFor='username' className='signup-label'>
-								User Name
-							</label>
-							<input
-								type='text'
-								className='signup-input'
-								value={username}
-								onChange={(e) => setUserName(e.target.value)}
-								required
-							/>
-						</div>
+
+            <div className="signup-form-group">
+              <label htmlFor="username" className="signup-label">User Name</label>
+              <input
+                type="text"
+                className="signup-input"
+                value={username}
+                onChange={(e) => setUserName(e.target.value)}
+                required
+                placeholder="username"
+              />
+            </div>
+            
+            <div className="signup-form-group">
+              <label htmlFor="type" className="signup-label">User Type</label>
+              <select
+                className="signup-select"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                required
+              >
+                <option value="student">Student</option>
+                <option value="organizer">Organizers</option>
+              </select>
+            </div>
+
 
 						<div className='signup-form-group'>
 							<label htmlFor='type' className='signup-label'>
