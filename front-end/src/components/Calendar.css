@@ -24,7 +24,6 @@
 
 /* Toolbar Title (e.g., January 2025) */
 .fc-toolbar-title {
-  font-family: 'Poppins', sans-serif; /* Modern font */
   font-size: 1.2rem; /* Smaller font size */
   font-weight: 600;
   color: #002145; /* UBC Dark Blue */
