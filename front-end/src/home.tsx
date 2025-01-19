@@ -58,7 +58,7 @@ const Home = () => {
 						alt='Calendar Icon'
 						style={{ width: '100px', height: '100px' }}
 					/>
-					<p>Welcome Home</p>
+					<p>Welcome {details?.firstName}</p>
 				</div>
 				<div>
 					<button
