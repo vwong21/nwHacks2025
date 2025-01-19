@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Calendar from './components/Calendar';
 import './globals.css';
 import { useUserContext } from './UserContext';
+import calenderIcon from './assets/calenderIcon.png'
 
 const Home = () => {
 	// userId persists here. Can use later for axios request
@@ -39,10 +40,16 @@ const Home = () => {
 				style={{
 					display: 'flex',
 					justifyContent: 'space-between',
-					padding: '10px 20px',
+					padding: '0px 20px',
 					backgroundColor: '#f8f9fa',
 				}}>
+				<div style = {{display:'flex', justifyContent:'center', alignItems:'center', fontWeight:"bold", fontSize:"30px"}}>
+					<img src={calenderIcon} 
+					alt="Calendar Icon" 
+					style={{ width: '100px', height: '100px' }}
+				/>
 				<p>Welcome Home</p>
+				</div>
 				<div>
 					<button
 						style={{
@@ -52,6 +59,7 @@ const Home = () => {
 							border: 'none',
 							borderRadius: '4px',
 							cursor: 'pointer',
+							marginTop: '30px'
 						}}
 						onClick={handleLogout}>
 						Logout
