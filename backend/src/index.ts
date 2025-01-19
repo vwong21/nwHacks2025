@@ -2,13 +2,14 @@ import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import * as db from './db';
 import cors from 'cors';
+import {v4 as uuidv4} from 'uuid';
 
 dotenv.config();
 
 const app: Express = express();
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
@@ -30,6 +31,7 @@ app.post('/user', async (req: Request, res: Response) => {
 });
 
 app.post('/newUser', async (req: Request, res: Response) => {
+	console.log("Received POST request to /newUser");
 	const id = req.body.uid;
 	const user = req.body.username;
 	const firstName = req.body.firstName;
@@ -85,7 +87,7 @@ app.post('/event', async (req: Request, res: Response) => {
 });
 
 app.post('/newEvent', async (req: Request, res: Response) => {
-	const id = req.body.uid;
+	const id = uuidv4();
 	const title = req.body.title;
 	const location = req.body.location;
 	const start = req.body.start;
@@ -105,6 +107,28 @@ app.post('/newEvent', async (req: Request, res: Response) => {
 			eventInfo: eventInfo,
 			message: `Event ${title} Created`,
 		});
+	} catch (err) {
+		if (err instanceof Error) {
+			res.status(400).json({
+				error: 'Bad Request',
+				message: err.message,
+			});
+		} else {
+			res.status(400).json({
+				error: 'Bad Request',
+				message: 'Unknown Error',
+			});
+		}
+	}
+});
+
+app.delete('/removeEvent/:id', async (req: Request, res: Response) => { 
+	const eventId = req.params.id;
+
+	try {
+		const deletedEvent = await db.deleteEvent(eventId);
+
+		res.status(200).json({deletedEvent: deletedEvent, message: `Event: ${eventId} successfully deleted`});
 	} catch (err) {
 		if (err instanceof Error) {
 			res.status(400).json({
