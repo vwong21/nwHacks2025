@@ -75,7 +75,7 @@ const getReturningUser = (id: string): Promise<any> => {
 	return new Promise((resolve, reject) => {
 		const res: any = {};
 
-		const queryS = `SELECT * FROM student WHERE id = ?`;
+		const queryS = `SELECT * FROM students WHERE id = ?`;
 
 		db.get(queryS, [id], (err: any, row: any) => {
 			if (err) {
@@ -93,7 +93,7 @@ const getReturningUser = (id: string): Promise<any> => {
 				return resolve(res);
 			}
 			
-			const queryEO = `SELECT * FROM organizer WHERE id = ?`
+			const queryEO = `SELECT * FROM organizers WHERE id = ?`
 
 			db.get(queryEO, [id], (err: any, row: any) => {
 				if (err) {
@@ -164,6 +164,32 @@ const createEvent = (
 				resolve(getEvent(id));
 			}
 		);
+	});
+};
+
+// delete an Event
+const deleteEvent = ( id: string) => {
+	return new Promise((resolve, reject) => {
+		db.run(
+			'DELETE FROM events WHERE id =?', [id], (err: any) => {
+
+				if (err) {
+					return reject(err);
+				}
+
+				console.log(`Deleted Event: ${id} From events`);
+
+				db.run('DELETE FROM event_student WHERE eventId =?', [id], (err: any) => {
+					if (err) {
+						return reject(err);
+					}
+
+					console.log(`Deleted Event: ${id} from all students`);
+
+					resolve(id);
+				});
+			}
+		)
 	});
 };
 
@@ -244,6 +270,7 @@ export {
 	getUser,
 	getReturningUser,
 	createEvent,
+	deleteEvent,
 	getEvent,
 	getEventsByUser,
 	getUsersByEvent,
