@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import * as db from './db';
 import cors from 'cors';
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 dotenv.config();
 
@@ -15,8 +15,6 @@ const port = process.env.PORT || 3000;
 
 app.post('/user', async (req: Request, res: Response) => {
 	const id = req.body.uid;
-	const token = req.body.token;
-
 	try {
 		const userInfo = await db.getReturningUser(id);
 		res.status(200).json({ userInfo: userInfo, message: 'User Found' });
@@ -33,7 +31,7 @@ app.post('/user', async (req: Request, res: Response) => {
 });
 
 app.post('/newUser', async (req: Request, res: Response) => {
-	console.log("Received POST request to /newUser");
+	console.log('Received POST request to /newUser');
 	const id = req.body.uid;
 	const user = req.body.username;
 	const firstName = req.body.firstName;
@@ -124,13 +122,16 @@ app.post('/newEvent', async (req: Request, res: Response) => {
 	}
 });
 
-app.delete('/removeEvent/:id', async (req: Request, res: Response) => { 
+app.delete('/removeEvent/:id', async (req: Request, res: Response) => {
 	const eventId = req.params.id;
 
 	try {
 		const deletedEvent = await db.deleteEvent(eventId);
 
-		res.status(200).json({deletedEvent: deletedEvent, message: `Event: ${eventId} successfully deleted`});
+		res.status(200).json({
+			deletedEvent: deletedEvent,
+			message: `Event: ${eventId} successfully deleted`,
+		});
 	} catch (err) {
 		if (err instanceof Error) {
 			res.status(400).json({
