@@ -106,7 +106,7 @@ app.get('/event_users/:eventId', async (req: Request, res: Response) => {
 		res.status(200).json({eventUsers: eventUsers, message: `Students in Event ${eventId} Found`});
 	} catch (err) {
 		if (err instanceof Error) {
-			res.status(400).json({error: "Bad Request", message: err.message});
+			res.status(404).json({error: "Not Found", message: err.message});
 		} else {
 			res.status(400).json({error: "Bad Request", message: "Unknown Error"});
 		}
@@ -122,7 +122,7 @@ app.get('/user_events/:userId', async (req: Request, res: Response) => {
 		res.status(200).json({userEvents: userEvents, message: `Events for User ${userId} Found`});
 	} catch (err) {
 		if (err instanceof Error) {
-			res.status(400).json({error: "Bad Request", message: err.message});
+			res.status(404).json({error: "Not Found", message: err.message});
 		} else {
 			res.status(400).json({error: "Bad Request", message: "Unknown Error"});
 		}
