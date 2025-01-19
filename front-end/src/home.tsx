@@ -8,14 +8,20 @@ import { useUserContext } from './UserContext';
 
 const Home = () => {
 	// userId persists here. Can use later for axios request
-	const { id } = useUserContext();
+	const { details } = useUserContext();
 	useEffect(() => {
-		console.log(id);
+		console.log(details);
 	});
 	const navigate = useNavigate();
 
 	// Role state: either "student" or "organizer"
-	const [role, setRole] = useState<'student' | 'organizer'>('student');
+	const [role, setRole] = useState<'student' | 'organizer'>(
+		details?.type || 'student' // Default to 'student' if details is null
+	);
+
+	useEffect(() => {
+		console.log('Current role:', role);
+	}, [role]);
 
 	// Logout handler
 	const handleLogout = () => {
@@ -60,7 +66,7 @@ const Home = () => {
 			</nav>
 
 			{/* Role Switcher */}
-			<div
+			{/* <div
 				style={{
 					display: 'flex',
 					justifyContent: 'center',
@@ -94,7 +100,7 @@ const Home = () => {
 					onClick={() => setRole('organizer')}>
 					Organizer
 				</button>
-			</div>
+			</div> */}
 
 			{/* Calendar Component with Role */}
 			<div style={{ padding: '20px', marginTop: '2rem' }}>
