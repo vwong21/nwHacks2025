@@ -20,15 +20,7 @@ function App() {
 		return () => unsubscribe(); // Cleanup the listener on unmount
 	}, []);
 
-	const handleLogout = () => {
-		signOut(auth)
-			.then(() => {
-				console.log('User logged out');
-			})
-			.catch((error) => {
-				console.error('Error logging out:', error);
-			});
-	};
+
 
 	if (loading) {
 		// Show loading state while checking auth status
@@ -46,9 +38,6 @@ function App() {
 								element={
 									<>
 										<Home />
-										<button onClick={handleLogout}>
-											Logout
-										</button>
 									</>
 								}
 							/>
