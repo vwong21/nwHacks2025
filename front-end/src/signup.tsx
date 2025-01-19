@@ -68,7 +68,6 @@ const Signup = () => {
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 								required
-								placeholder='Email address'
 							/>
 						</div>
 
@@ -82,20 +81,6 @@ const Signup = () => {
 								value={firstName}
 								onChange={(e) => setFirstName(e.target.value)}
 								required
-								placeholder='First Name'
-							/>
-						</div>
-						<div className='signup-form-group'>
-							<label htmlFor='firstName' className='signup-label'>
-								First Name
-							</label>
-							<input
-								type='text'
-								className='signup-input'
-								value={firstName}
-								onChange={(e) => setFirstName(e.target.value)}
-								required
-								placeholder='First Name'
 							/>
 						</div>
 
@@ -109,7 +94,6 @@ const Signup = () => {
 								value={lastName}
 								onChange={(e) => setLastName(e.target.value)}
 								required
-								placeholder='Last Name'
 							/>
 						</div>
 
@@ -123,7 +107,6 @@ const Signup = () => {
 								value={username}
 								onChange={(e) => setUserName(e.target.value)}
 								required
-								placeholder='username'
 							/>
 						</div>
 
@@ -153,7 +136,6 @@ const Signup = () => {
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 								required
-								placeholder='Password'
 							/>
 						</div>
 

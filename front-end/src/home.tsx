@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from './firebaseConfig';
 import { useNavigate } from 'react-router-dom';
 import Calendar from './components/Calendar';
 import './globals.css';
+import { useUserContext } from './UserContext';
 
 const Home = () => {
+	// userId persists here. Can use later for axios request
+	const { id } = useUserContext();
+	useEffect(() => {
+		console.log(id);
+	});
 	const navigate = useNavigate();
 
 	// Role state: either "student" or "organizer"
