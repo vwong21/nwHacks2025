@@ -1,36 +1,36 @@
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import "./App.css";
-import { app } from "./firebaseConfig";
+import React from 'react';
+import {  signOut } from "firebase/auth";
+import {auth} from './firebaseConfig';
+import { useNavigate } from 'react-router-dom';
 
-export default function Home() {
-  const navigate = useNavigate();
-  const [user, setUser] = useState(false);
+const Home = () => {
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(getAuth(app), (user) => {
-      console.log(user)
-      if (!user) {
-        navigate("/login");
-      }
-      setUser(!!user);
-    });
+    const handleLogout = () => {               
+        signOut(auth).then(() => {
+        // Sign-out successful.
+            navigate("/");
+            console.log("Signed out successfully")
+        }).catch((error) => {
+        // An error happened.
+        });
+    }
 
-    return () => {
-      unsubscribe();
-    };
-  }, [user, setUser, navigate]);
+    return(
+        <>
+            <nav>
+                <p>
+                    Welcome Home
+                </p>
 
-  function handleClick() {
-    const auth = getAuth(app);
-    auth.signOut();
-  }
-  console.log(user);
-
-  return (
-    <div>
-      <button onClick={handleClick}>Sign out</button>
-    </div>
-  );
+                <div>
+                    <button onClick={handleLogout}>
+                        Logout
+                    </button>
+                </div>
+            </nav>
+        </>
+    )
 }
+
+export default Home;
