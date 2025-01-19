@@ -1,3 +1,5 @@
+import { create } from 'domain';
+
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('../mydb.db');
 
@@ -256,6 +258,16 @@ const getEventsByUser = async (studentId: string): Promise<any[]> => {
 		throw error;
 	}
 };
+
+// createUser(
+// 	'Cn9IMFfgZxU8OQM7aDShY0LzvRE2',
+// 	'vwong21',
+// 	'Vincent',
+// 	'Wong',
+// 	'vincentwong5609@gmail.com',
+// 	'password',
+// 	'student'
+// );
 
 export {
 	createUser,
