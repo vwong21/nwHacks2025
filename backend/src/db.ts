@@ -1,3 +1,5 @@
+import { create } from 'domain';
+
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('../mydb.db');
 
@@ -75,46 +77,37 @@ const getReturningUser = (id: string): Promise<any> => {
 	return new Promise((resolve, reject) => {
 		const res: any = {};
 
-		const queryS = `SELECT * FROM student WHERE id = ?`;
-
-		db.get(queryS, [id], (err: any, row: any) => {
-			if (err) {
-				return reject(err);
-			}
-
-			if (row) {
-				// Populate the res object with student row data
-				for (const [key, value] of Object.entries(row)) {
-					res[key] = value;
-				}
-
-				res['type'] = "student";
-
-				return resolve(res);
-			}
-			
-			const queryEO = `SELECT * FROM organizer WHERE id = ?`
-
-			db.get(queryEO, [id], (err: any, row: any) => {
-				if (err) {
-					return reject(err);
-				}
-	
-				if (!row) {
-					return reject(new Error('User not found'));
-				}
-	
-				// Populate the res object with organizer row data
-				for (const [key, value] of Object.entries(row)) {
-					res[key] = value;
-				}
-				
-				res['type'] = "organizer";
-
-				resolve(res);
+		const queryDatabase = (query: string, params: any[], type: string) => {
+			return new Promise((resolve, reject) => {
+				db.get(query, params, (err: any, row: any) => {
+					if (err) return reject(err);
+					if (row) {
+						for (const [key, value] of Object.entries(row)) {
+							res[key] = value;
+						}
+						res['type'] = type;
+						resolve(res);
+					} else {
+						resolve(null); // Continue checking the next table
+					}
+				});
 			});
-		});
-		
+		};
+
+		queryDatabase(`SELECT * FROM students WHERE id = ?`, [id], 'student')
+			.then((result) => {
+				if (result) return resolve(result); // Found in students
+				return queryDatabase(
+					`SELECT * FROM organizers WHERE id = ?`,
+					[id],
+					'organizer'
+				);
+			})
+			.then((result) => {
+				if (result) return resolve(result); // Found in organizers
+				reject(new Error('User not found')); // Not found in either table
+			})
+			.catch((err) => reject(err));
 	});
 };
 
@@ -150,7 +143,7 @@ const createEvent = (
 	title: string,
 	location: string,
 	start: string,
-	end:string,
+	end: string,
 	organizerId: string
 ) => {
 	return new Promise((resolve, reject) => {
@@ -164,6 +157,33 @@ const createEvent = (
 				resolve(getEvent(id));
 			}
 		);
+	});
+};
+
+// delete an Event
+const deleteEvent = (id: string) => {
+	return new Promise((resolve, reject) => {
+		db.run('DELETE FROM events WHERE id =?', [id], (err: any) => {
+			if (err) {
+				return reject(err);
+			}
+
+			console.log(`Deleted Event: ${id} From events`);
+
+			db.run(
+				'DELETE FROM event_student WHERE eventId =?',
+				[id],
+				(err: any) => {
+					if (err) {
+						return reject(err);
+					}
+
+					console.log(`Deleted Event: ${id} from all students`);
+
+					resolve(id);
+				}
+			);
+		});
 	});
 };
 
@@ -239,11 +259,22 @@ const getEventsByUser = async (studentId: string): Promise<any[]> => {
 	}
 };
 
+// createUser(
+// 	'Cn9IMFfgZxU8OQM7aDShY0LzvRE2',
+// 	'vwong21',
+// 	'Vincent',
+// 	'Wong',
+// 	'vincentwong5609@gmail.com',
+// 	'password',
+// 	'student'
+// );
+
 export {
 	createUser,
 	getUser,
 	getReturningUser,
 	createEvent,
+	deleteEvent,
 	getEvent,
 	getEventsByUser,
 	getUsersByEvent,
