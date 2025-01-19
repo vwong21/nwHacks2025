@@ -16,7 +16,7 @@ db.serialize(() => {
 	);
 	db.run(
 		// Creates event_student table if doesn't exist
-		`CREATE TABLE IF NOT EXISTS event_student (eventId TEXT NOT NULL, studentId TEXT NOT NULL, FOREIGN KEY (eventId) REFERENCES events(id), FOREIGN KEY (studentId) REFERENCES students(id))`
+		`CREATE TABLE IF NOT EXISTS event_student (id INTEGER PRIMARY KEY AUTOINCREMENT, eventId TEXT NOT NULL, studentId TEXT NOT NULL, FOREIGN KEY (eventId) REFERENCES events(id), FOREIGN KEY (studentId) REFERENCES students(id))`
 	);
 });
 
@@ -118,10 +118,84 @@ const createEvent = (
 	});
 };
 
+// create event_student
+const createEventStudent = (eventId: string, studentId: string) => {
+	return new Promise((resolve, reject) => {
+		db.run(
+			`INSERT INTO event_student (eventId, studentId) VALUES (?, ?)`,
+			[eventId, studentId],
+			(err: any) => {
+				if (err) {
+					return reject(err);
+				}
+				resolve('done');
+			}
+		);
+	});
+};
+
 // getUsersByEvent
+const getUsersByEvent = async (eventId: string): Promise<any[]> => {
+	try {
+		const rows: any[] = await new Promise((resolve, reject) => {
+			db.all(
+				`SELECT * FROM event_student WHERE eventId = ?`,
+				[eventId],
+				(err: any, rows: any) => {
+					if (err) {
+						return reject(err);
+					}
+					resolve(rows);
+				}
+			);
+		});
+
+		// Fetch detailed user data for each studentId
+		const detailedUsers = await Promise.all(
+			rows.map((row) => getUser(row.studentId, 'student'))
+		);
+
+		return detailedUsers;
+	} catch (error) {
+		console.error('Error in getUsersByEvent:', error);
+		throw error;
+	}
+};
 
 // getEventsByUser
+const getEventsByUser = async (studentId: string): Promise<any[]> => {
+	try {
+		const rows: any[] = await new Promise((resolve, reject) => {
+			db.all(
+				`SELECT * FROM event_student WHERE studentId = ?`,
+				[studentId],
+				(err: any, rows: any) => {
+					if (err) {
+						return reject(err);
+					}
+					resolve(rows);
+				}
+			);
+		});
 
-createEvent('1', 'Event 1', 'Location 1', 'Schedule 1', '1');
+		// Fetch detailed event data for each eventId
+		const detailedEvents = await Promise.all(
+			rows.map((row) => getEvent(row.eventId))
+		);
 
-export { createUser, getUser, createEvent, getEvent };
+		return detailedEvents;
+	} catch (error) {
+		console.error('Error in getEventsByUser:', error);
+		throw error;
+	}
+};
+
+export {
+	createUser,
+	getUser,
+	createEvent,
+	getEvent,
+	getEventsByUser,
+	getUsersByEvent,
+	createEventStudent,
+};
