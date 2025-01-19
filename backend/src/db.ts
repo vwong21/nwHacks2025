@@ -12,7 +12,7 @@ db.serialize(() => {
 	);
 	db.run(
 		// Creates events table if doesn't exist
-		`CREATE TABLE IF NOT EXISTS events (id TEXT PRIMARY KEY NOT NULL, title TEXT NOT NULL, location TEXT NOT NULL, schedule TEXT NOT NULL, organizerId TEXT NOT NULL, FOREIGN KEY (organizerId) REFERENCES organizers(id))`
+		`CREATE TABLE IF NOT EXISTS events (id TEXT PRIMARY KEY NOT NULL, title TEXT NOT NULL, location TEXT NOT NULL, start TEXT NOT NULL, end TEXT NOT NULL, organizerId TEXT NOT NULL, FOREIGN KEY (organizerId) REFERENCES organizers(id))`
 	);
 	db.run(
 		// Creates event_student table if doesn't exist
@@ -101,13 +101,14 @@ const createEvent = (
 	id: string,
 	title: string,
 	location: string,
-	schedule: string,
+	start: string,
+	end:string,
 	organizerId: string
 ) => {
 	return new Promise((resolve, reject) => {
 		db.run(
-			`INSERT INTO events (id, title, location, schedule, organizerId) VALUES (?, ?, ?, ?, ?)`,
-			[id, title, location, schedule, organizerId],
+			`INSERT INTO events (id, title, location, start, end, organizerId) VALUES (?, ?, ?, ?, ?, ?)`,
+			[id, title, location, start, end, organizerId],
 			(err: any) => {
 				if (err) {
 					return reject(err);
