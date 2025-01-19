@@ -75,7 +75,7 @@ const getReturningUser = (id: string): Promise<any> => {
 	return new Promise((resolve, reject) => {
 		const res: any = {};
 
-		const queryS = `SELECT * FROM student WHERE id = ?`;
+		const queryS = `SELECT * FROM students WHERE id = ?`;
 
 		db.get(queryS, [id], (err: any, row: any) => {
 			if (err) {
@@ -88,33 +88,32 @@ const getReturningUser = (id: string): Promise<any> => {
 					res[key] = value;
 				}
 
-				res['type'] = "student";
-
+				res['type'] = 'student';
+				console.log(res);
 				return resolve(res);
 			}
-			
-			const queryEO = `SELECT * FROM organizer WHERE id = ?`
+
+			const queryEO = `SELECT * FROM organizers WHERE id = ?`;
 
 			db.get(queryEO, [id], (err: any, row: any) => {
 				if (err) {
 					return reject(err);
 				}
-	
+
 				if (!row) {
 					return reject(new Error('User not found'));
 				}
-	
+
 				// Populate the res object with organizer row data
 				for (const [key, value] of Object.entries(row)) {
 					res[key] = value;
 				}
-				
-				res['type'] = "organizer";
 
+				res['type'] = 'organizer';
+				console.log(res);
 				resolve(res);
 			});
 		});
-		
 	});
 };
 
@@ -150,7 +149,7 @@ const createEvent = (
 	title: string,
 	location: string,
 	start: string,
-	end:string,
+	end: string,
 	organizerId: string
 ) => {
 	return new Promise((resolve, reject) => {

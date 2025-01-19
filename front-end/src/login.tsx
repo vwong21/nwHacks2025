@@ -11,7 +11,6 @@ const Login = () => {
 
 	const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const details: { token?: string; id?: string } = {};
 		try {
 			const userCredential = await signInWithEmailAndPassword(
 				auth,
@@ -19,14 +18,10 @@ const Login = () => {
 				password
 			);
 			const user = userCredential.user;
-
-			const accessToken = await user.getIdToken();
-			details['token'] = accessToken;
-			details['id'] = user.uid;
-			console.log(details);
+			console.log(user.uid);
 
 			const response = await axios.post('http://localhost:3000/user', {
-				details,
+				id: user.uid,
 			});
 			navigate('/');
 			console.log(response.data);

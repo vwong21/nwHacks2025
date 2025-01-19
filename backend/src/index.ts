@@ -14,7 +14,6 @@ const port = process.env.PORT || 3000;
 
 app.post('/user', async (req: Request, res: Response) => {
 	const id = req.body.uid;
-	const token = req.body.token;
 
 	try {
 		const userInfo = await db.getReturningUser(id);
