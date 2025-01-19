@@ -24,7 +24,7 @@ const EventForm: React.FC<EventFormProps> = ({
   const [startTime, setStartTime] = useState('');
   const [endDate, setEndDate] = useState('');
   const [endTime, setEndTime] = useState('');
-  const {id} = useUserContext();
+  const {details} = useUserContext();
 
   // Populate form fields with initial event data
   useEffect(() => {
@@ -40,11 +40,11 @@ const EventForm: React.FC<EventFormProps> = ({
   }, [initialEvent]);
 
   const handleSubmit = async () => {
-    if (title && startDate && endDate && id) {
+    if (title && startDate && endDate && details?.id) {
       const start = `${startDate}T${startTime || '00:00'}`;
       const end = `${endDate}T${endTime || '23:59'}`;
 
-	  console.log(id);
+	  console.log(details.id);
       try {
 
         setLoading(true);
@@ -54,7 +54,7 @@ const EventForm: React.FC<EventFormProps> = ({
             location: location,
             start: start,
             end: end,
-			organizerId: id
+			organizerId: details.id
           })
         
           console.log(response.data);
