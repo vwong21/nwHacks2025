@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './EventForm.css';
+import axios from 'axios';
 
 interface EventFormProps {
   initialEvent: any;
@@ -15,7 +16,9 @@ const EventForm: React.FC<EventFormProps> = ({
   onCancel,
 }) => {
   const [title, setTitle] = useState('');
+  const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState('');
+  const [location, setLocation] = useState(''); // New location state
   const [startDate, setStartDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -26,6 +29,7 @@ const EventForm: React.FC<EventFormProps> = ({
     if (initialEvent) {
       setTitle(initialEvent.title || '');
       setDescription(initialEvent.description || '');
+      setLocation(initialEvent.location || ''); // Populate location if available
       setStartDate(initialEvent.start?.split('T')[0] || '');
       setStartTime(initialEvent.start?.split('T')[1]?.substr(0, 5) || '');
       setEndDate(initialEvent.end?.split('T')[0] || '');
@@ -33,19 +37,37 @@ const EventForm: React.FC<EventFormProps> = ({
     }
   }, [initialEvent]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (title && startDate && endDate) {
       const start = `${startDate}T${startTime || '00:00'}`;
       const end = `${endDate}T${endTime || '23:59'}`;
 
-      onSubmit({
-        id: initialEvent?.id || String(Date.now()),
-        title,
-        description,
-        start, // Use local date-time string directly
-        end,   // Use local date-time string directly
-        allDay: !startTime && !endTime,
-      });
+      try {
+
+        setLoading(true);
+
+        const response = await axios.post('http://localhost:3000/newEvent', {
+            title: title,
+            location: location,
+            start: start,
+            end: end
+          })
+        
+          console.log(response.data);
+          onSubmit({
+            id: initialEvent?.id || String(Date.now()),
+            title,
+            description,
+            location,
+            start, // Use local date-time string directly
+            end,   // Use local date-time string directly
+            allDay: !startTime && !endTime,
+          });
+      } catch (err) {
+        console.error("Error submitting: ",err)
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -64,6 +86,12 @@ const EventForm: React.FC<EventFormProps> = ({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
+        <input
+          type="text"
+          placeholder="Event Location"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+        />
         <label>
           Start Date:
           <input
@@ -96,8 +124,8 @@ const EventForm: React.FC<EventFormProps> = ({
             onChange={(e) => setEndTime(e.target.value)}
           />
         </label>
-        <button onClick={handleSubmit}>
-          {initialEvent?.id ? 'Save Changes' : 'Add Event'}
+        <button onClick={handleSubmit} disabled={loading}>
+          {loading? 'Submitting...' : initialEvent?.id ? 'Save Changes' : 'Add Event'}
         </button>
         {initialEvent?.id && onDelete && (
           <button className="delete-button" onClick={onDelete}>
