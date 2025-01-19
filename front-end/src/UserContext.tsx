@@ -1,25 +1,37 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
+interface UserDetails {
+	id: string;
+	username: string;
+	firstName: string;
+	lastName: string;
+	email: string;
+	password: string;
+	type: 'student' | 'organizer';
+}
+
 interface UserContextType {
-	id: string | null;
-	setId: (id: string) => void;
+	details: UserDetails | null;
+	setDetails: (details: UserDetails) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-	const [id, setId] = useState<string | null>(
-		localStorage.getItem('id') || null
+	const [details, setDetails] = useState<UserDetails | null>(
+		localStorage.getItem('details')
+			? JSON.parse(localStorage.getItem('details')!)
+			: null
 	);
 
-	// Persist uid in localStorage when it's updated
-	const updateId = (newId: string) => {
-		setId(newId);
-		localStorage.setItem('id', newId);
+	// Persist details in localStorage when it's updated
+	const updateDetails = (newDetails: UserDetails) => {
+		setDetails(newDetails);
+		localStorage.setItem('details', JSON.stringify(newDetails));
 	};
 
 	return (
-		<UserContext.Provider value={{ id, setId: updateId }}>
+		<UserContext.Provider value={{ details, setDetails: updateDetails }}>
 			{children}
 		</UserContext.Provider>
 	);
