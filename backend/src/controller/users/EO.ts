@@ -20,8 +20,8 @@ export class EO extends User {
 		this.type = "organizer";
 	}
 
-	public createEvent(id:string, title:string, location:string, schedule:Date): Event {
-		return new Event(id, title, location, schedule, this.id);
+	public createEvent(id:string, title:string, location:string, start:Date, end: Date): Event {
+		return new Event(id, title, location, start,end, this.id);
 	}
 
 
