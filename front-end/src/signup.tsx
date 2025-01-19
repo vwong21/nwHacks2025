@@ -109,7 +109,7 @@ const Signup = () => {
                 required
               >
                 <option value="student">Student</option>
-                <option value="event planner">Event Planner</option>
+                <option value="organizer">Organizers</option>
               </select>
             </div>
 
