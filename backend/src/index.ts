@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import * as db from './db';
 import cors from 'cors';
+import {v4 as uuidv4} from 'uuid';
 
 dotenv.config();
 
@@ -87,7 +88,7 @@ app.post('/event', async (req: Request, res: Response) => {
 });
 
 app.post('/newEvent', async (req: Request, res: Response) => {
-	const id = req.body.uid;
+	const id = uuidv4();
 	const title = req.body.title;
 	const location = req.body.location;
 	const start = req.body.start;

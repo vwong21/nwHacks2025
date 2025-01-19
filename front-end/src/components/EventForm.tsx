@@ -43,7 +43,7 @@ const EventForm: React.FC<EventFormProps> = ({
         title,
         description,
         start, // Use local date-time string directly
-        end,   // Use local date-time string directly
+        end,   // Use local date-time string directly	
         allDay: !startTime && !endTime,
       });
     }
