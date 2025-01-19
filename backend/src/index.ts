@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import * as db from './db';
 import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
+import { getEvent } from './db';
 
 dotenv.config();
 
@@ -158,6 +159,32 @@ app.delete('/removeEvent/:id', async (req: Request, res: Response) => {
 				message: err.message,
 			});
 		} else {
+			res.status(400).json({
+				error: 'Bad Request',
+				message: 'Unknown Error',
+			});
+		}
+	}
+});
+
+app.get('/event_student/:studentId', async (req: Request, res: Response) => {
+	const studentId = req.params.studentId;
+
+	try {
+		const eventStudentInfo = await db.getEventsByUser(studentId);
+
+		res.status(200).json({
+			events: eventStudentInfo,
+			message: `Events for Student ${studentId} Found`,
+		});
+	} catch (err) {
+		if (err instanceof Error) {
+			res.status(400).json({
+				error: 'Bad Request',
+				message: err.message,
+			});
+		} else {
+			console.error(err);
 			res.status(400).json({
 				error: 'Bad Request',
 				message: 'Unknown Error',
