@@ -21,7 +21,7 @@ const Login = () => {
 				password
 			);
 			const user = userCredential.user;
-			console.log(user.uid);
+			setId(user.uid);
 
 			const response = await axios.post('http://localhost:3000/user', {
 				uid: user.uid,
