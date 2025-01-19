@@ -77,6 +77,23 @@ const EventForm: React.FC<EventFormProps> = ({
 		}
 	};
 
+	const handleDelete = async() => {
+		if (initialEvent) {
+			try {
+				const response = await axios.delete(
+					'http://localhost:3000/event/' + initialEvent?.id
+				);
+
+				
+				console.log(response);
+
+				onDelete?.();
+			} catch (err) {
+				console.error('Error deleting: ', err);
+			}
+		}
+	}
+
 	return (
 		<div className='event-form-overlay' onClick={onCancel}>
 			<div className='event-form' onClick={(e) => e.stopPropagation()}>
@@ -137,7 +154,7 @@ const EventForm: React.FC<EventFormProps> = ({
 						: 'Add Event'}
 				</button>
 				{initialEvent?.id && onDelete && (
-					<button className='delete-button' onClick={onDelete}>
+					<button className='delete-button' onClick={handleDelete}>
 						Delete Event
 					</button>
 				)}

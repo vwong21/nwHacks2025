@@ -114,6 +114,14 @@ const Calendar: React.FC<CalendarProps> = ({ role }) => {
 			setEvents((prevEvents) =>
 				prevEvents.filter((e) => e.id !== editingEvent.id)
 			);
+			return (
+				<EventForm
+					initialEvent={editingEvent.id}
+					onSubmit={saveEvent}
+					onDelete={deleteEvent}
+					onCancel={() => setEditingEvent(null)}
+				/>
+			)
 		}
 		setEditingEvent(null);
 	};
