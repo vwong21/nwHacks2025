@@ -1,92 +1,81 @@
-
-import React, { useState } from 'react';
-import axios from 'axios';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './firebaseConfig';
-import { NavLink, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebaseConfig";
+import { NavLink, useNavigate } from "react-router-dom";
+import "./login.css";
 
 const Login = () => {
-	const navigate = useNavigate();
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-	const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		const details: { token?: string; id?: string } = {};
-		try {
-			const userCredential = await signInWithEmailAndPassword(
-				auth,
-				email,
-				password
-			);
-			const user = userCredential.user;
+  const onLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        navigate("/home");
+        console.log(user);
+      })
+      .catch((error) => {
+        console.log(error.code, error.message);
+      });
+  };
 
-			const accessToken = await user.getIdToken();
-			details['token'] = accessToken;
-			details['id'] = user.uid;
-			console.log(details);
+  return (
+    <main className="login-container">
+      <section className="login-section">
+        <div>
+          <p className="login-title">NWHacks</p>
 
-			const response = await axios.post('http://localhost:3000/user', {
-				details,
-			});
-			navigate('/');
-			console.log(response.data);
-			return response.data;
-		} catch (error) {
-			console.error(error);
-		}
-	};
+          <form className="login-form" onSubmit={onLogin}>
+            <div className="login-form-group">
+              <label htmlFor="email-address" className="login-label">
+                Email address
+              </label>
+              <input
+                id="email-address"
+                name="email"
+                type="email"
+                className="login-input"
+                required
+                placeholder="Email address"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
 
-	return (
-		<>
-			<main>
-				<section>
-					<div>
-						<p> FocusApp </p>
+            <div className="login-form-group">
+              <label htmlFor="password" className="login-label">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                className="login-input"
+                required
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
-						<form onSubmit={onLogin}>
-							<div>
-								<label htmlFor='email-address'>
-									Email address
-								</label>
-								<input
-									id='email-address'
-									name='email'
-									type='email'
-									required
-									placeholder='Email address'
-									onChange={(e) => setEmail(e.target.value)}
-								/>
-							</div>
+            <div>
+              <button type="submit" className="login-button">
+                Login
+              </button>
+            </div>
+          </form>
 
-							<div>
-								<label htmlFor='password'>Password</label>
-								<input
-									id='password'
-									name='password'
-									type='password'
-									required
-									placeholder='Password'
-									onChange={(e) =>
-										setPassword(e.target.value)
-									}
-								/>
-							</div>
-
-							<div>
-								<button type='submit'>Login</button>
-							</div>
-						</form>
-
-						<p className='text-sm text-white text-center'>
-							No account yet?{' '}
-							<NavLink to='/signup'>Sign up</NavLink>
-						</p>
-					</div>
-				</section>
-			</main>
-		</>
-	);
+          <p className="login-footer">
+            No account yet?{" "}
+            <NavLink to="/signup" className="login-link">
+              Sign up
+            </NavLink>
+          </p>
+        </div>
+      </section>
+    </main>
+  );
 };
 
 export default Login;
