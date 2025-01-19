@@ -8,8 +8,8 @@ dotenv.config();
 
 const app: Express = express();
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
@@ -33,6 +33,7 @@ app.post('/user', async (req: Request, res: Response) => {
 });
 
 app.post('/newUser', async (req: Request, res: Response) => {
+	console.log("Received POST request to /newUser");
 	const id = req.body.uid;
 	const user = req.body.username;
 	const firstName = req.body.firstName;

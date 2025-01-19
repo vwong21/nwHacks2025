@@ -9,7 +9,7 @@ import "./login.css";
 
 const Login = () => {
 	const navigate = useNavigate();
-	const {setId} = useUserContext();
+  const {setId} = useUserContext();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
@@ -28,9 +28,7 @@ const Login = () => {
 			details['token'] = accessToken;
 			details['id'] = user.uid;
 			console.log(details);
-
-			setId(user.uid);
-
+      setId(user.uid);
 			const response = await axios.post('http://localhost:3000/user', {
 				uid: user.uid,
 				token: accessToken
