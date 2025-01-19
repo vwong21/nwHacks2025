@@ -11,11 +11,12 @@ app.use(express.json());
 const port = process.env.PORT || 3000;
 
 app.post('/user', async (req: Request, res:Response) => {
+
 	const id = req.body.uid; 
-	const type = req.body.type;
+	const token = req.body.token;
 
 	try {
-		const userInfo = await db.getUser(id,type);
+		const userInfo = await db.getReturningUser(id);
 		res.status(200).json({userInfo: userInfo, message: "User Found"});
 	} catch (err) {
 		if (err instanceof Error) {
