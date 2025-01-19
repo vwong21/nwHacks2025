@@ -70,6 +70,54 @@ const getUser = (id: string, userType: string): Promise<any> => {
 	});
 };
 
+// Function to get a returning user. Receives id from firebase and userType to determine user or organizer.
+const getReturningUser = (id: string): Promise<any> => {
+	return new Promise((resolve, reject) => {
+		const res: any = {};
+
+		const queryS = `SELECT * FROM student WHERE id = ?`;
+
+		db.get(queryS, [id], (err: any, row: any) => {
+			if (err) {
+				return reject(err);
+			}
+
+			if (row) {
+				// Populate the res object with student row data
+				for (const [key, value] of Object.entries(row)) {
+					res[key] = value;
+				}
+
+				res['type'] = "student";
+
+				return resolve(res);
+			}
+			
+			const queryEO = `SELECT * FROM organizer WHERE id = ?`
+
+			db.get(queryEO, [id], (err: any, row: any) => {
+				if (err) {
+					return reject(err);
+				}
+	
+				if (!row) {
+					return reject(new Error('User not found'));
+				}
+	
+				// Populate the res object with organizer row data
+				for (const [key, value] of Object.entries(row)) {
+					res[key] = value;
+				}
+				
+				res['type'] = "organizer";
+
+				resolve(res);
+			});
+		});
+		
+	});
+};
+
 // getEvent
 const getEvent = (id: string): Promise<any> => {
 	return new Promise((resolve, reject) => {
@@ -194,6 +242,7 @@ const getEventsByUser = async (studentId: string): Promise<any[]> => {
 export {
 	createUser,
 	getUser,
+	getReturningUser,
 	createEvent,
 	getEvent,
 	getEventsByUser,
