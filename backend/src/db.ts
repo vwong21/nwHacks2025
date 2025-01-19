@@ -75,7 +75,7 @@ const getReturningUser = (id: string): Promise<any> => {
 	return new Promise((resolve, reject) => {
 		const res: any = {};
 
-		const queryS = `SELECT * FROM student WHERE id = ?`;
+		const queryS = `SELECT * FROM students WHERE id = ?`;
 
 		db.get(queryS, [id], (err: any, row: any) => {
 			if (err) {
@@ -93,7 +93,7 @@ const getReturningUser = (id: string): Promise<any> => {
 				return resolve(res);
 			}
 			
-			const queryEO = `SELECT * FROM organizer WHERE id = ?`
+			const queryEO = `SELECT * FROM organizers WHERE id = ?`
 
 			db.get(queryEO, [id], (err: any, row: any) => {
 				if (err) {
