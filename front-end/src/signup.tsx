@@ -12,7 +12,8 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [userType, setUserType] = useState("student");
+  const [type, setType] = useState("student");
+  const [username, setUserName] = useState("");
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -27,9 +28,10 @@ const Signup = () => {
       const userData = {
         uid: user.uid,
         email,
+        username,
         firstName,
         lastName,
-        userType,
+        type,
       };
       const apiUrl = "http://localhost:3000/newUser";
 
@@ -72,6 +74,7 @@ const Signup = () => {
               />
             </div>
 
+
             <div className="signup-form-group">
               <label htmlFor="lastName" className="signup-label">Last Name</label>
               <input
@@ -85,11 +88,23 @@ const Signup = () => {
             </div>
 
             <div className="signup-form-group">
-              <label htmlFor="userType" className="signup-label">User Type</label>
+              <label htmlFor="username" className="signup-label">User Name</label>
+              <input
+                type="text"
+                className="signup-input"
+                value={username}
+                onChange={(e) => setUserName(e.target.value)}
+                required
+                placeholder="username"
+              />
+            </div>
+            
+            <div className="signup-form-group">
+              <label htmlFor="type" className="signup-label">User Type</label>
               <select
                 className="signup-select"
-                value={userType}
-                onChange={(e) => setUserType(e.target.value)}
+                value={type}
+                onChange={(e) => setType(e.target.value)}
                 required
               >
                 <option value="student">Student</option>
