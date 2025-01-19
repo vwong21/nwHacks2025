@@ -41,6 +41,7 @@ app.post('/newUser', async (req: Request, res: Response) => {
 	const email = req.body.email;
 	const password = req.body.password;
 	const type = req.body.type;
+	console.log("Request body:", req.body);
 	try {
 		const userInfo = await db.createUser(
 			id,
