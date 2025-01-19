@@ -1,0 +1,11 @@
+
+@font-face {
+    font-family: 'vhs-gothic'; /* The name you'll use for the font */
+    src: url('./assets/vhs-gothic.ttf') format('truetype'); /* Correct path and format */
+    font-weight: normal; /* Optional: specify font weight */
+    font-style: normal; /* Optional: specify font style */
+  }
+  
+  * {
+    font-family: 'vhs-gothic', sans-serif; /* Fallback to sans-serif */
+  }

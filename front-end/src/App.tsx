@@ -5,7 +5,7 @@ import { User, signOut } from 'firebase/auth'; // Import Firebase's User type an
 import Home from './home';
 import Signup from './signup';
 import Login from './login';
-
+import './App.css';
 function App() {
 	const [user, setUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState<boolean>(true); // Track loading state
