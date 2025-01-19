@@ -38,6 +38,7 @@ const Signup = () => {
 				firstName,
 				lastName,
 				type,
+				password,
 			};
 			const apiUrl = 'http://localhost:3000/newUser';
 
@@ -137,7 +138,7 @@ const Signup = () => {
 								onChange={(e) => setType(e.target.value)}
 								required>
 								<option value='student'>Student</option>
-								<option value='event-planner'>
+								<option value='event planner'>
 									Event Planner
 								</option>
 							</select>
