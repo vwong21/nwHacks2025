@@ -136,6 +136,30 @@ const getEvent = (id: string): Promise<any> => {
 		});
 	});
 };
+const getEventByOrganizer = (orgId: string) => {
+	return new Promise((resolve, reject) => {
+		const res: any = {};
+
+		const query = `SELECT * FROM events WHERE organizerId = ?`;
+
+		db.get(query, [orgId], (err: any, row: any) => {
+			if (err) {
+				return reject(err);
+			}
+
+			if (!row) {
+				return reject(new Error('Event not found'));
+			}
+
+			// Populate the res object with row data
+			for (const [key, value] of Object.entries(row)) {
+				res[key] = value;
+			}
+			console.log(res);
+			resolve(res);
+		});
+	});
+};
 
 // createEvent
 const createEvent = (
@@ -297,4 +321,5 @@ export {
 	getEventsByUser,
 	getUsersByEvent,
 	createEventStudent,
+	getEventByOrganizer,
 };

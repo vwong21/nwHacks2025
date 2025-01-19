@@ -39,7 +39,7 @@ app.post('/newUser', async (req: Request, res: Response) => {
 	const email = req.body.email;
 	const password = req.body.password;
 	const type = req.body.type;
-	console.log("Request body:", req.body);
+	console.log('Request body:', req.body);
 	try {
 		const userInfo = await db.createUser(
 			id,
@@ -60,6 +60,24 @@ app.post('/newUser', async (req: Request, res: Response) => {
 				error: 'Bad Request',
 				message: err.message,
 			});
+		} else {
+			res.status(400).json({
+				error: 'Bad Request',
+				message: 'Unknown Error',
+			});
+		}
+	}
+});
+
+app.get('/event/:id', async (req: Request, res: Response) => {
+	const orgId = req.params.id;
+
+	try {
+		const eventInfo = await db.getEventByOrganizer(orgId);
+		res.status(200).json({ eventInfo: eventInfo, message: 'Event Found' });
+	} catch (err) {
+		if (err instanceof Error) {
+			res.status(404).json({ error: 'Not Found', message: err.message });
 		} else {
 			res.status(400).json({
 				error: 'Bad Request',
