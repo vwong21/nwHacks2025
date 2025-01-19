@@ -38,7 +38,7 @@ const Login = () => {
 		<main className='login-container'>
 			<section className='login-section'>
 				<div>
-					<p className='login-title'>NWHacks</p>
+					<p className='login-title'>UEvent</p>
 
 					<form className='login-form' onSubmit={onLogin}>
 						<div className='login-form-group'>

@@ -54,6 +54,8 @@ body {
     border-radius: 5px;
     font-size: 14px;
     transition: border-color 0.3s ease;
+    font-family: 'vhs-gothic';
+
   }
   
   .signup-input:focus,

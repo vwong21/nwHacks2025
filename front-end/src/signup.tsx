@@ -55,7 +55,7 @@ const Signup = () => {
 		<main className='signup-container'>
 			<section className='signup-section'>
 				<div>
-					<h1 className='signup-title'>NWhacks</h1>
+					<h1 className='signup-title'>UEvent</h1>
 					<form className='signup-form' onSubmit={onSubmit}>
 						<div className='signup-form-group'>
 							<label
