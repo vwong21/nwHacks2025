@@ -51,7 +51,7 @@ const Calendar: React.FC<CalendarProps> = ({ role }) => {
 		};
 
 		fetchEventDetails();
-	}, [details?.id]);
+	}, [events]);
 
 	// Handle date selection for organizers
 	const handleDateSelect = (selectInfo: any) => {
