@@ -5,6 +5,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from './firebaseConfig';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useUserContext } from './UserContext';
+import "./login.css";
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -42,56 +43,60 @@ const Login = () => {
 		}
 	};
 
-	return (
-		<>
-			<main>
-				<section>
-					<div>
-						<p> FocusApp </p>
+  return (
+    <main className="login-container">
+      <section className="login-section">
+        <div>
+          <p className="login-title">NWHacks</p>
 
-						<form onSubmit={onLogin}>
-							<div>
-								<label htmlFor='email-address'>
-									Email address
-								</label>
-								<input
-									id='email-address'
-									name='email'
-									type='email'
-									required
-									placeholder='Email address'
-									onChange={(e) => setEmail(e.target.value)}
-								/>
-							</div>
+          <form className="login-form" onSubmit={onLogin}>
+            <div className="login-form-group">
+              <label htmlFor="email-address" className="login-label">
+                Email address
+              </label>
+              <input
+                id="email-address"
+                name="email"
+                type="email"
+                className="login-input"
+                required
+                placeholder="Email address"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
 
-							<div>
-								<label htmlFor='password'>Password</label>
-								<input
-									id='password'
-									name='password'
-									type='password'
-									required
-									placeholder='Password'
-									onChange={(e) =>
-										setPassword(e.target.value)
-									}
-								/>
-							</div>
+            <div className="login-form-group">
+              <label htmlFor="password" className="login-label">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                className="login-input"
+                required
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
-							<div>
-								<button type='submit'>Login</button>
-							</div>
-						</form>
+            <div>
+              <button type="submit" className="login-button">
+                Login
+              </button>
+            </div>
+          </form>
 
-						<p className='text-sm text-white text-center'>
-							No account yet?{' '}
-							<NavLink to='/signup'>Sign up</NavLink>
-						</p>
-					</div>
-				</section>
-			</main>
-		</>
-	);
+          <p className="login-footer">
+            No account yet?{" "}
+            <NavLink to="/signup" className="login-link">
+              Sign up
+            </NavLink>
+          </p>
+        </div>
+      </section>
+    </main>
+  );
 };
 
 export default Login;
