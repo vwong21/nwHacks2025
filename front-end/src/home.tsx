@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import Calendar from './components/Calendar';
 import './globals.css';
 import { useUserContext } from './UserContext';
-import calenderIcon from './assets/calenderIcon.png'
+import calenderIcon from './assets/calenderIcon.png';
 
 const Home = () => {
 	// userId persists here. Can use later for axios request
 	const { details } = useUserContext();
 	useEffect(() => {
-		console.log(details);
+		setRole(details?.type || 'student');
 	});
 	const navigate = useNavigate();
 
@@ -19,10 +19,6 @@ const Home = () => {
 	const [role, setRole] = useState<'student' | 'organizer'>(
 		details?.type || 'student' // Default to 'student' if details is null
 	);
-
-	useEffect(() => {
-		console.log('Current role:', role);
-	}, [role]);
 
 	// Logout handler
 	const handleLogout = () => {
@@ -49,12 +45,20 @@ const Home = () => {
 					padding: '0px 20px',
 					backgroundColor: '#f8f9fa',
 				}}>
-				<div style = {{display:'flex', justifyContent:'center', alignItems:'center', fontWeight:"bold", fontSize:"30px"}}>
-					<img src={calenderIcon} 
-					alt="Calendar Icon" 
-					style={{ width: '100px', height: '100px' }}
-				/>
-				<p>Welcome Home</p>
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						fontWeight: 'bold',
+						fontSize: '30px',
+					}}>
+					<img
+						src={calenderIcon}
+						alt='Calendar Icon'
+						style={{ width: '100px', height: '100px' }}
+					/>
+					<p>Welcome Home</p>
 				</div>
 				<div>
 					<button
@@ -65,7 +69,7 @@ const Home = () => {
 							border: 'none',
 							borderRadius: '4px',
 							cursor: 'pointer',
-							marginTop: '30px'
+							marginTop: '30px',
 						}}
 						onClick={handleLogout}>
 						Logout
