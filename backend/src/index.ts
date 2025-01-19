@@ -54,6 +54,7 @@ app.post('/newUser', async (req: Request, res: Response) => {
 			message: `User ${user} Created`,
 		});
 	} catch (err) {
+		console.error(err)
 		if (err instanceof Error) {
 			res.status(400).json({
 				error: 'Bad Request',

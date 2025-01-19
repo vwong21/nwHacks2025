@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebaseConfig";
+import axios from "axios";
 import "./signup.css";
 
 const Signup = () => {
@@ -30,9 +31,14 @@ const Signup = () => {
         lastName,
         userType,
       };
-      console.log(userData); // Replace with backend API call
+      const apiUrl = "http://localhost:3000/newUser";
+
+      const sendData = await axios.post(apiUrl, {userData});
+      
+      console.log("User saved successfully:", sendData);
+      navigate("/login");
     } catch (error: any) {
-      console.log(error.code, error.message);
+      console.error("Error creating user:", error.code, error.message);
     }
   };
 
