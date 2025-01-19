@@ -1,26 +1,45 @@
-import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebaseConfig";
-import { NavLink, useNavigate } from "react-router-dom";
+
+import React, { useState } from 'react';
+import axios from 'axios';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from './firebaseConfig';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useUserContext } from './UserContext';
 import "./login.css";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+	const navigate = useNavigate();
+  const {setId} = useUserContext();
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 
-  const onLogin = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        navigate("/home");
-        console.log(user);
-      })
-      .catch((error) => {
-        console.log(error.code, error.message);
-      });
-  };
+	const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const details: { token?: string; id?: string } = {};
+		try {
+			const userCredential = await signInWithEmailAndPassword(
+				auth,
+				email,
+				password
+			);
+			const user = userCredential.user;
+
+			const accessToken = await user.getIdToken();
+			details['token'] = accessToken;
+			details['id'] = user.uid;
+			console.log(details);
+      setId(user.uid);
+			const response = await axios.post('http://localhost:3000/user', {
+				uid: user.uid,
+				token: accessToken
+			});
+			navigate('/');
+			console.log(response.data);
+			return response.data;
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
   return (
     <main className="login-container">
