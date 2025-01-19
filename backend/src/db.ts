@@ -131,7 +131,6 @@ const getEvent = (id: string): Promise<any> => {
 			for (const [key, value] of Object.entries(row)) {
 				res[key] = value;
 			}
-			console.log(res);
 			resolve(res);
 		});
 	});
@@ -179,20 +178,20 @@ const createEvent = (
 					return reject(err);
 				}
 
-				const query = 'SELECT id FROM students'
-				db.all(query, [], (err:any, rows:any) => {
+				const query = 'SELECT id FROM students';
+				db.all(query, [], (err: any, rows: any) => {
 					if (err) {
 						return reject(err);
 					}
 
 					if (!rows) {
-						return reject(new Error("No students"));
+						return reject(new Error('No students'));
 					}
-
-					const stu_ids = rows.map((row: { id: any; }) => row.id)
-
-					for (const stu in stu_ids) {
-						createEventStudent(id,stu);
+					// const stu_ids = rows.map((row: { id: any }) => row.id);
+					console.log(rows);
+					for (const row of rows) {
+						console.log(row.id);
+						createEventStudent(id, row.id);
 					}
 
 					resolve(getEvent(id));

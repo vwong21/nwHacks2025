@@ -22,15 +22,23 @@ const Calendar: React.FC<CalendarProps> = ({ role }) => {
 	useEffect(() => {
 		const fetchEventDetails = async () => {
 			try {
-				const response = await axios.get(
-					`http://localhost:3000/event/${details?.id}`
-				);
+				let response;
+				if (role === 'student') {
+					const res = await axios.get(
+						`http://localhost:3000/event_student/${details?.id}`
+					);
+					response = res.data; // Directly access the response data
+				}
+				if (role === 'organizer') {
+					response = await axios.get(
+						`http://localhost:3000/event/${details?.id}`
+					);
+				}
 
-				// Handle the fetched data, ensuring it's an array
-				const eventInfo = response.data.eventInfo;
-				const eventsArray = Array.isArray(eventInfo)
-					? eventInfo
-					: [eventInfo];
+				// Check if the response contains an array (students) or a single object (organizers)
+				const eventsArray = Array.isArray(response?.events)
+					? response?.events
+					: [response?.events]; // If it's a single object, convert it into an array
 
 				// Format the events to match FullCalendar's requirements
 				const formattedEvents = eventsArray.map((event: any) => ({
@@ -44,14 +52,14 @@ const Calendar: React.FC<CalendarProps> = ({ role }) => {
 					},
 				}));
 
-				setEvents(formattedEvents); // Update state
+				setEvents(formattedEvents); // Update state with the formatted events
 			} catch (error) {
 				console.error('Error fetching events:', error);
 			}
 		};
 
 		fetchEventDetails();
-	}, [events]);
+	}, []);
 
 	// Handle date selection for organizers
 	const handleDateSelect = (selectInfo: any) => {
