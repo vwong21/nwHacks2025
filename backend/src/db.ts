@@ -167,6 +167,32 @@ const createEvent = (
 	});
 };
 
+// delete an Event
+const deleteEvent = ( id: string) => {
+	return new Promise((resolve, reject) => {
+		db.run(
+			'DELETE FROM events WHERE id =?', [id], (err: any) => {
+
+				if (err) {
+					return reject(err);
+				}
+
+				console.log(`Deleted Event: ${id} From events`);
+
+				db.run('DELETE FROM event_student WHERE eventId =?', [id], (err: any) => {
+					if (err) {
+						return reject(err);
+					}
+
+					console.log(`Deleted Event: ${id} from all students`);
+
+					resolve(id);
+				});
+			}
+		)
+	});
+};
+
 // create event_student
 const createEventStudent = (eventId: string, studentId: string) => {
 	return new Promise((resolve, reject) => {
@@ -244,6 +270,7 @@ export {
 	getUser,
 	getReturningUser,
 	createEvent,
+	deleteEvent,
 	getEvent,
 	getEventsByUser,
 	getUsersByEvent,

@@ -123,6 +123,28 @@ app.post('/newEvent', async (req: Request, res: Response) => {
 	}
 });
 
+app.delete('/removeEvent/:id', async (req: Request, res: Response) => { 
+	const eventId = req.params.id;
+
+	try {
+		const deletedEvent = await db.deleteEvent(eventId);
+
+		res.status(200).json({deletedEvent: deletedEvent, message: `Event: ${eventId} successfully deleted`});
+	} catch (err) {
+		if (err instanceof Error) {
+			res.status(400).json({
+				error: 'Bad Request',
+				message: err.message,
+			});
+		} else {
+			res.status(400).json({
+				error: 'Bad Request',
+				message: 'Unknown Error',
+			});
+		}
+	}
+});
+
 app.post('/event_student', async (req: Request, res: Response) => {
 	const eventId = req.body.eventId;
 	const studentId = req.body.studentId;

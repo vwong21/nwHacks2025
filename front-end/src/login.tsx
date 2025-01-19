@@ -4,9 +4,11 @@ import axios from 'axios';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from './firebaseConfig';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useUserContext } from './UserContext';
 
 const Login = () => {
 	const navigate = useNavigate();
+	const {setId} = useUserContext();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
@@ -26,8 +28,11 @@ const Login = () => {
 			details['id'] = user.uid;
 			console.log(details);
 
+			setId(user.uid);
+
 			const response = await axios.post('http://localhost:3000/user', {
-				details,
+				uid: user.uid,
+				token: accessToken
 			});
 			navigate('/');
 			console.log(response.data);

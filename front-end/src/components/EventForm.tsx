@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './EventForm.css';
 import axios from 'axios';
+import { useUserContext } from '../UserContext';
 
 interface EventFormProps {
   initialEvent: any;
@@ -23,6 +24,7 @@ const EventForm: React.FC<EventFormProps> = ({
   const [startTime, setStartTime] = useState('');
   const [endDate, setEndDate] = useState('');
   const [endTime, setEndTime] = useState('');
+  const {id} = useUserContext();
 
   // Populate form fields with initial event data
   useEffect(() => {
@@ -38,11 +40,11 @@ const EventForm: React.FC<EventFormProps> = ({
   }, [initialEvent]);
 
   const handleSubmit = async () => {
-    if (title && startDate && endDate) {
+    if (title && startDate && endDate && id) {
       const start = `${startDate}T${startTime || '00:00'}`;
       const end = `${endDate}T${endTime || '23:59'}`;
 
-
+	  console.log(id);
       try {
 
         setLoading(true);
@@ -51,7 +53,8 @@ const EventForm: React.FC<EventFormProps> = ({
             title: title,
             location: location,
             start: start,
-            end: end
+            end: end,
+			organizerId: id
           })
         
           console.log(response.data);
