@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -22,7 +21,7 @@ const Login = () => {
 			console.log(user.uid);
 
 			const response = await axios.post('http://localhost:3000/user', {
-				id: user.uid,
+				uid: user.uid,
 			});
 			navigate('/');
 			console.log(response.data);

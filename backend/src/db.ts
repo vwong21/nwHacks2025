@@ -75,45 +75,37 @@ const getReturningUser = (id: string): Promise<any> => {
 	return new Promise((resolve, reject) => {
 		const res: any = {};
 
-		const queryS = `SELECT * FROM students WHERE id = ?`;
-
-		db.get(queryS, [id], (err: any, row: any) => {
-			if (err) {
-				return reject(err);
-			}
-
-			if (row) {
-				// Populate the res object with student row data
-				for (const [key, value] of Object.entries(row)) {
-					res[key] = value;
-				}
-
-				res['type'] = 'student';
-				console.log(res);
-				return resolve(res);
-			}
-
-			const queryEO = `SELECT * FROM organizers WHERE id = ?`;
-
-			db.get(queryEO, [id], (err: any, row: any) => {
-				if (err) {
-					return reject(err);
-				}
-
-				if (!row) {
-					return reject(new Error('User not found'));
-				}
-
-				// Populate the res object with organizer row data
-				for (const [key, value] of Object.entries(row)) {
-					res[key] = value;
-				}
-
-				res['type'] = 'organizer';
-				console.log(res);
-				resolve(res);
+		const queryDatabase = (query: string, params: any[], type: string) => {
+			return new Promise((resolve, reject) => {
+				db.get(query, params, (err: any, row: any) => {
+					if (err) return reject(err);
+					if (row) {
+						for (const [key, value] of Object.entries(row)) {
+							res[key] = value;
+						}
+						res['type'] = type;
+						resolve(res);
+					} else {
+						resolve(null); // Continue checking the next table
+					}
+				});
 			});
-		});
+		};
+
+		queryDatabase(`SELECT * FROM students WHERE id = ?`, [id], 'student')
+			.then((result) => {
+				if (result) return resolve(result); // Found in students
+				return queryDatabase(
+					`SELECT * FROM organizers WHERE id = ?`,
+					[id],
+					'organizer'
+				);
+			})
+			.then((result) => {
+				if (result) return resolve(result); // Found in organizers
+				reject(new Error('User not found')); // Not found in either table
+			})
+			.catch((err) => reject(err));
 	});
 };
 
