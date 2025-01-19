@@ -178,7 +178,25 @@ const createEvent = (
 				if (err) {
 					return reject(err);
 				}
-				resolve(getEvent(id));
+
+				const query = 'SELECT id FROM students'
+				db.all(query, [], (err:any, rows:any) => {
+					if (err) {
+						return reject(err);
+					}
+
+					if (!rows) {
+						return reject(new Error("No students"));
+					}
+
+					const stu_ids = rows.map((row: { id: any; }) => row.id)
+
+					for (const stu in stu_ids) {
+						createEventStudent(id,stu);
+					}
+
+					resolve(getEvent(id));
+				});
 			}
 		);
 	});
